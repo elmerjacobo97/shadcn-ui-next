@@ -23,6 +23,7 @@ const links = [
   { name: 'input-otp', href: 'input-otp' }, // One-time password (OTP)
   { name: 'progress', href: 'progress' },
   { name: 'sheet', href: 'sheet' },
+  { name: 'skeleton', href: 'skeleton' },
 ].sort((a, b) => a.name.localeCompare(b.name));
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
