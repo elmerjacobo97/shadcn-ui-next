@@ -58,7 +58,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
     <div>
       <div className="flex items-center py-4 justify-between">
         <Input
-          placeholder="Filter emails..."
+          placeholder="Filter anything ... (client name, email, status)"
           value={(table.getColumn('email')?.getFilterValue() as string) ?? ''}
           onChange={(event) => {
             // setCurrentStatus('all');
@@ -179,19 +179,37 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
           </TableBody>
         </Table>
 
-        <div>
-          <div className="flex-1 text-sm text-muted-foreground ml-2">
+        <div className="flex items-center justify-between p-2">
+          <div className=" text-sm text-muted-foreground">
             {table.getFilteredSelectedRowModel().rows.length} of {table.getFilteredRowModel().rows.length} row(s) selected.
           </div>
-        </div>
-
-        <div className="flex items-center justify-end space-x-2 py-4 mr-2">
-          <Button variant="outline" size="sm" onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>
-            Previous
-          </Button>
-          <Button variant="outline" size="sm" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
-            Next
-          </Button>
+          <Select
+            onValueChange={(value) => {
+              table.setPageSize(+value);
+            }}
+          >
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="10 Rows" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Rows Per Page</SelectLabel>
+                <SelectItem value="5">5 Rows</SelectItem>
+                <SelectItem value="10">10 Rows</SelectItem>
+                <SelectItem value="25">25 Rows</SelectItem>
+                <SelectItem value="50">50 Rows</SelectItem>
+                <SelectItem value="100">100 Rows</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+          <div className="flex items-center justify-end space-x-2">
+            <Button variant="outline" size="sm" onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>
+              Previous
+            </Button>
+            <Button variant="outline" size="sm" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
+              Next
+            </Button>
+          </div>
         </div>
       </div>
     </div>

@@ -2,7 +2,7 @@
 
 import { Badge } from '@/components/ui/badge';
 import { Payment } from '@/data/payments';
-import { ColumnDef, SortDirection } from '@tanstack/react-table';
+import { ColumnDef, FilterFn, Row, SortDirection } from '@tanstack/react-table';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from '@/components/ui/button';
 import {
@@ -16,6 +16,29 @@ import {
 import { ChevronDownIcon, ChevronUpIcon, DotsHorizontalIcon } from '@radix-ui/react-icons';
 // import { toast } from '@/components/ui/use-toast';
 import { toast } from 'sonner';
+
+const myCustomFilterFn: FilterFn<Payment> = (row: Row<Payment>, columnId: string, filterValue: string, addMeta: (meta: any) => void) => {
+  filterValue = filterValue.toLowerCase();
+
+  const filterParts = filterValue.split(' ');
+  const rowValues = `${row.original.email} ${row.original.clientName} ${row.original.status}`.toLowerCase();
+
+  return filterParts.every((part) => rowValues.includes(part));
+
+  // if (row.original.email.includes(filterValue)) {
+  //   return true;
+  // }
+
+  // if (row.original.clientName.includes(filterValue)) {
+  //   return true;
+  // }
+
+  // if (row.original.status.toString().includes(filterValue)) {
+  //   return true;
+  // }
+
+  // return false;
+};
 
 const SortedIcon = ({ isSorted }: { isSorted: false | SortDirection }) => {
   if (isSorted === 'asc') {
@@ -76,6 +99,7 @@ export const columns: ColumnDef<Payment>[] = [
   },
   {
     accessorKey: 'email',
+    filterFn: myCustomFilterFn,
     header: ({ column }) => {
       return (
         <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
